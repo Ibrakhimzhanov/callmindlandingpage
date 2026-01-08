@@ -9,14 +9,29 @@ interface LeadFormProps {
   onSuccess?: () => void;
 }
 
+const formatPhone = (value: string): string => {
+  const digits = value.replace(/\D/g, "");
+  if (digits.length === 0) return "+998 ";
+  if (digits.length <= 3) return "+" + digits;
+  if (digits.length <= 5) return "+" + digits.slice(0, 3) + " " + digits.slice(3);
+  if (digits.length <= 8) return "+" + digits.slice(0, 3) + " " + digits.slice(3, 5) + " " + digits.slice(5);
+  if (digits.length <= 10) return "+" + digits.slice(0, 3) + " " + digits.slice(3, 5) + " " + digits.slice(5, 8) + " " + digits.slice(8);
+  return "+" + digits.slice(0, 3) + " " + digits.slice(3, 5) + " " + digits.slice(5, 8) + " " + digits.slice(8, 10) + " " + digits.slice(10, 12);
+};
+
 export default function LeadForm({ onSuccess }: LeadFormProps) {
   const [formData, setFormData] = useState({
     name: "",
-    phone: "",
+    phone: "+998 ",
     company: "",
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhone(e.target.value);
+    setFormData({ ...formData, phone: formatted });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,8 +52,8 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
       }
 
       setStatus("success");
-      setFormData({ name: "", phone: "", company: "" });
-      
+      setFormData({ name: "", phone: "+998 ", company: "" });
+
       setTimeout(() => {
         onSuccess?.();
       }, 2000);
@@ -58,7 +73,7 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
         <h4 className="text-xl font-bold text-white mb-2">Rahmat!</h4>
         <p className="text-text-secondary">
-          Tez orada siz bilan bog'lanamiz
+          Tez orada siz bilan boglanamiz
         </p>
       </motion.div>
     );
@@ -87,7 +102,7 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
         <input
           type="tel"
           value={formData.phone}
-          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          onChange={handlePhoneChange}
           placeholder="+998 90 123 45 67"
           required
           className="w-full px-4 py-3 bg-surface border border-border rounded-xl text-white placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"

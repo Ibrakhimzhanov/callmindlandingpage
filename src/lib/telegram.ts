@@ -8,27 +8,21 @@ interface LeadData {
   source?: string;
 }
 
-function escapeMarkdown(text: string): string {
-  return text.replace(/[_*[\]()~`>#+\-=|{}.!]/g, "\$&");
-}
-
 export async function sendToTelegram(data: LeadData): Promise<boolean> {
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
     console.error("Telegram credentials not configured");
     return false;
   }
 
-  const escapedName = escapeMarkdown(data.name);
-  const escapedPhone = escapeMarkdown(data.phone);
-  const escapedCompany = escapeMarkdown(data.company);
   const timestamp = new Date().toLocaleString("uz-UZ", { timeZone: "Asia/Tashkent" });
+  const cleanPhone = data.phone.replace(/\s/g, "");
 
   const message = [
-    "🔔 *Yangi lid!*",
+    "🔔 *Yangi lid\!*",
     "",
-    "👤 *Ism:* " + escapedName,
-    "📞 *Telefon:* " + escapedPhone,
-    "🏢 *Kompaniya:* " + escapedCompany,
+    "👤 *Ism:* *" + data.name + "*",
+    "📞 *Telefon:* `" + cleanPhone + "`",
+    "🏢 *Kompaniya:* " + data.company,
     "📍 *Manba:* " + (data.source || "Landing page"),
     "",
     "⏰ *Vaqt:* " + timestamp,
@@ -45,12 +39,15 @@ export async function sendToTelegram(data: LeadData): Promise<boolean> {
         body: JSON.stringify({
           chat_id: TELEGRAM_CHAT_ID,
           text: message,
-          parse_mode: "Markdown",
+          parse_mode: "MarkdownV2",
         }),
       }
     );
 
     const result = await response.json();
+    if (!result.ok) {
+      console.error("Telegram error:", result);
+    }
     return result.ok;
   } catch (error) {
     console.error("Failed to send to Telegram:", error);
