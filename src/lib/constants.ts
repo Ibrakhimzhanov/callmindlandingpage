@@ -1,3 +1,20 @@
+
+export interface Feature {
+  number: string;
+  title: string;
+  description: string;
+  coming?: boolean;
+}
+
+export interface FunctionItem {
+  id: string;
+  icon: string;
+  title: string;
+  description: string;
+  coming?: boolean;
+  features: Feature[];
+}
+
 export const SITE_CONFIG = {
   name: "CallMind",
   tagline: "Har bir qo'ng'iroq muhim",
@@ -53,7 +70,7 @@ export const SOLUTION_STEPS = [
   },
 ];
 
-export const FUNCTIONS = [
+export const FUNCTIONS: FunctionItem[] = [
   {
     id: "speech",
     icon: "Headphones",
