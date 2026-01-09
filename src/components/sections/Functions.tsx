@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import {
   Headphones,
   CheckSquare,
@@ -26,6 +27,82 @@ const iconMap: Record<string, any> = {
   Database,
   GraduationCap,
   FileBarChart,
+};
+
+// Анимации для контента
+const contentVariants = {
+  initial: {
+    opacity: 0,
+    y: 20,
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.4,
+      ease: [0.4, 0, 0.2, 1] as const // easeOut
+    }
+  },
+  exit: {
+    opacity: 0,
+    y: -20,
+    transition: {
+      duration: 0.3,
+      ease: [0.4, 0, 1, 1] as const // easeIn
+    }
+  }
+};
+
+// Анимации для изображения
+const imageVariants = {
+  initial: {
+    opacity: 0,
+    scale: 0.95,
+    x: 30
+  },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    x: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.4, 0, 0.2, 1] as const, // easeOut
+      delay: 0.1
+    }
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.95,
+    x: -30,
+    transition: {
+      duration: 0.3,
+      ease: [0.4, 0, 1, 1] as const // easeIn
+    }
+  }
+};
+
+// Анимация для стрелки
+const arrowVariants = {
+  initial: {
+    opacity: 0,
+    x: -10
+  },
+  animate: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.3,
+      ease: [0.4, 0, 0.2, 1] as const // easeOut
+    }
+  },
+  exit: {
+    opacity: 0,
+    x: 10,
+    transition: {
+      duration: 0.2,
+      ease: [0.4, 0, 1, 1] as const // easeIn
+    }
+  }
 };
 
 export default function Functions() {
@@ -58,26 +135,61 @@ export default function Functions() {
                   <motion.button
                     key={func.id}
                     onClick={() => setActiveTab(func.id)}
-                    className={`w-full flex items-center gap-4 px-4 py-4 rounded-xl text-left transition-all ${
+                    className={`w-full flex items-center gap-4 px-4 py-4 rounded-xl text-left transition-all duration-300 relative overflow-hidden ${
                       isActive
                         ? "bg-accent text-white shadow-lg shadow-accent/30"
-                        : "bg-white/5 hover:bg-white/10 text-text-secondary hover:text-white"
+                        : "bg-white/5 text-text-secondary"
                     }`}
-                    whileHover={{ x: isActive ? 0 : 5 }}
+                    whileHover={!isActive ? {
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                      x: 5,
+                      transition: { duration: 0.2 }
+                    } : {}}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                    {/* Фоновый эффект при hover */}
+                    {!isActive && (
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-accent/5 to-transparent"
+                        initial={{ opacity: 0, x: -100 }}
+                        whileHover={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    )}
+
+                    <div className={`relative z-10 w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-300 ${
                       isActive ? "bg-white/20" : "bg-accent/10"
                     }`}>
-                      <Icon className={`w-5 h-5 ${isActive ? "text-white" : "text-accent"}`} />
+                      <Icon className={`w-5 h-5 transition-colors duration-300 ${isActive ? "text-white" : "text-accent"}`} />
                     </div>
-                    <span className="font-medium flex-grow">{func.title}</span>
+
+                    <span className={`relative z-10 font-medium flex-grow transition-colors duration-300 ${
+                      isActive ? "text-white" : "hover:text-white"
+                    }`}>
+                      {func.title}
+                    </span>
+
                     {func.coming && (
-                      <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 text-xs font-medium flex items-center gap-1">
+                      <span className="relative z-10 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 text-xs font-medium flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         Tez kunda
                       </span>
                     )}
-                    {isActive && <ChevronRight className="w-5 h-5" />}
+
+                    {/* Анимированная стрелка */}
+                    <AnimatePresence mode="wait">
+                      {isActive && (
+                        <motion.div
+                          variants={arrowVariants}
+                          initial="initial"
+                          animate="animate"
+                          exit="exit"
+                          className="relative z-10"
+                        >
+                          <ChevronRight className="w-5 h-5 text-white" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.button>
                 );
               })}
@@ -90,67 +202,119 @@ export default function Functions() {
               {activeFunction && (
                 <motion.div
                   key={activeFunction.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="glass rounded-2xl p-8"
+                  variants={contentVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  className="glass rounded-2xl p-8 overflow-hidden"
                 >
-                  {/* Header */}
-                  <div className="mb-8">
-                    <h3 className="text-2xl font-bold text-white mb-2">
-                      {activeFunction.title}
-                    </h3>
-                    <p className="text-text-secondary">
-                      {activeFunction.description}
-                    </p>
-                  </div>
+                  {/* Grid для текста и изображения */}
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                    {/* Текстовая часть */}
+                    <div>
+                      {/* Header */}
+                      <div className="mb-8">
+                        <h3 className="text-2xl font-bold text-white mb-2">
+                          {activeFunction.title}
+                        </h3>
+                        <p className="text-text-secondary">
+                          {activeFunction.description}
+                        </p>
+                      </div>
 
-                  {/* Features list */}
-                  <div className="space-y-6">
-                    {activeFunction.features.map((feature, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className={`flex gap-4 ${feature.coming ? "opacity-70" : ""}`}
-                      >
-                        <div className={`font-bold text-lg ${feature.coming ? "text-amber-400" : "text-accent"}`}>
-                          {feature.number}
-                        </div>
-                        <div className="flex-grow">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h4 className="text-white font-medium">
-                              {feature.title}
-                            </h4>
-                            {feature.coming && (
-                              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 text-xs font-medium flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
-                                Tez kunda
-                              </span>
-                            )}
+                      {/* Features list */}
+                      <div className="space-y-6">
+                        {activeFunction.features.map((feature, index) => (
+                          <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 + 0.2 }}
+                            className={`flex gap-4 ${feature.coming ? "opacity-70" : ""}`}
+                          >
+                            <div className={`font-bold text-lg ${feature.coming ? "text-amber-400" : "text-accent"}`}>
+                              {feature.number}
+                            </div>
+                            <div className="flex-grow">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h4 className="text-white font-medium">
+                                  {feature.title}
+                                </h4>
+                                {feature.coming && (
+                                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 text-xs font-medium flex items-center gap-1">
+                                    <Clock className="w-3 h-3" />
+                                    Tez kunda
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-text-secondary text-sm">
+                                {feature.description}
+                              </p>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+
+                      {/* Coming soon badge */}
+                      {activeFunction.coming && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.5 }}
+                          className="mt-8 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20"
+                        >
+                          <div className="flex items-center gap-3">
+                            <Clock className="w-5 h-5 text-amber-400" />
+                            <div>
+                              <p className="text-amber-400 font-medium">Tez kunda qo&apos;shiladi</p>
+                              <p className="text-amber-400/70 text-sm">Bu imkoniyat ustida ishlamoqdamiz</p>
+                            </div>
                           </div>
-                          <p className="text-text-secondary text-sm">
-                            {feature.description}
-                          </p>
+                        </motion.div>
+                      )}
+                    </div>
+
+                    {/* Изображение справа */}
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeFunction.id + "-image"}
+                        variants={imageVariants}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className="relative hidden xl:flex items-center justify-center"
+                      >
+                        <div className="relative w-full aspect-square max-w-md">
+                          {/* Placeholder для изображения с градиентным фоном */}
+                          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-accent/20 via-primary/10 to-transparent border border-white/10 shadow-xl shadow-accent/10 overflow-hidden">
+                            {/* Иконка функции в центре как placeholder */}
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="relative">
+                                {/* Свечение */}
+                                <div className="absolute inset-0 blur-3xl bg-accent/30 rounded-full scale-150" />
+                                {/* Иконка */}
+                                {(() => {
+                                  const Icon = iconMap[activeFunction.icon];
+                                  return <Icon className="relative w-24 h-24 text-accent/60" />;
+                                })()}
+                              </div>
+                            </div>
+                            {/* Декоративные элементы */}
+                            <div className="absolute top-4 right-4 w-20 h-20 rounded-full bg-accent/10 blur-xl" />
+                            <div className="absolute bottom-4 left-4 w-32 h-32 rounded-full bg-primary/20 blur-xl" />
+                            {/* Сетка */}
+                            <div className="absolute inset-0 opacity-10"
+                              style={{
+                                backgroundImage: `linear-gradient(to right, white 1px, transparent 1px),
+                                                  linear-gradient(to bottom, white 1px, transparent 1px)`,
+                                backgroundSize: '40px 40px'
+                              }}
+                            />
+                          </div>
                         </div>
                       </motion.div>
-                    ))}
+                    </AnimatePresence>
                   </div>
-
-                  {/* Coming soon badge */}
-                  {activeFunction.coming && (
-                    <div className="mt-8 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
-                      <div className="flex items-center gap-3">
-                        <Clock className="w-5 h-5 text-amber-400" />
-                        <div>
-                          <p className="text-amber-400 font-medium">Tez kunda qo'shiladi</p>
-                          <p className="text-amber-400/70 text-sm">Bu imkoniyat ustida ishlamoqdamiz</p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </motion.div>
               )}
             </AnimatePresence>

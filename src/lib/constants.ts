@@ -12,6 +12,7 @@ export interface FunctionItem {
   title: string;
   description: string;
   coming?: boolean;
+  image?: string;
   features: Feature[];
 }
 
@@ -76,6 +77,7 @@ export const FUNCTIONS: FunctionItem[] = [
     icon: "Headphones",
     title: "AI nutqni aniqlash",
     description: "Qo'ng'iroqlarni avtomatik matnga aylantirish",
+    image: "/images/functions/speech.svg",
     features: [
       {
         number: "01",
@@ -99,6 +101,7 @@ export const FUNCTIONS: FunctionItem[] = [
     icon: "CheckSquare",
     title: "Nazorat va baholash",
     description: "Operatorlar ishini avtomatik baholash",
+    image: "/images/functions/control.svg",
     features: [
       {
         number: "01",
@@ -122,6 +125,7 @@ export const FUNCTIONS: FunctionItem[] = [
     icon: "MessageSquare",
     title: "Dialog tahlili",
     description: "Suhbatlarni chuqur tahlil qilish",
+    image: "/images/functions/analysis.svg",
     features: [
       {
         number: "01",
@@ -147,6 +151,7 @@ export const FUNCTIONS: FunctionItem[] = [
     icon: "PieChart",
     title: "Multimodal analitika",
     description: "Barcha ma'lumotlarni bir joyda ko'ring",
+    image: "/images/functions/analytics.svg",
     features: [
       {
         number: "01",
@@ -172,6 +177,7 @@ export const FUNCTIONS: FunctionItem[] = [
     icon: "Bell",
     title: "Bildirishnomalar tizimi",
     description: "Muhim hodisalar haqida xabar olish",
+    image: "/images/functions/notifications.svg",
     features: [
       {
         number: "01",
@@ -195,6 +201,7 @@ export const FUNCTIONS: FunctionItem[] = [
     icon: "Database",
     title: "CRM integratsiya",
     description: "Mavjud tizimlar bilan bog'lanish",
+    image: "/images/functions/crm.svg",
     features: [
       {
         number: "01",
@@ -219,6 +226,7 @@ export const FUNCTIONS: FunctionItem[] = [
     title: "Xodimlarni o'qitish",
     description: "Eng yaxshi amaliyotlar asosida o'qitish",
     coming: true,
+    image: "/images/functions/training.svg",
     features: [
       {
         number: "01",
@@ -243,6 +251,7 @@ export const FUNCTIONS: FunctionItem[] = [
     title: "Maxsus hisobotlar",
     description: "Kerakli formatda hisobotlar",
     coming: true,
+    image: "/images/functions/reports.svg",
     features: [
       {
         number: "01",

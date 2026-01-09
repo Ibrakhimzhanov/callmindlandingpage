@@ -4,11 +4,12 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import Button from "@/components/ui/Button";
 import { NAV_LINKS } from "@/lib/constants";
 
 interface HeaderProps {
-  onCtaClick: () => void;
+  onCtaClick?: () => void;
 }
 
 export default function Header({ onCtaClick }: HeaderProps) {
@@ -34,7 +35,7 @@ export default function Header({ onCtaClick }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <a href="#" className="flex items-center">
+          <Link href="/" className="flex items-center">
             <Image
               src="/logo-white.png"
               alt="CallMind"
@@ -43,24 +44,30 @@ export default function Header({ onCtaClick }: HeaderProps) {
               className="h-10 w-auto"
               priority
             />
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             {NAV_LINKS.map((link) => (
-              <a
+              <Link
                 key={link.href}
-                href={link.href}
+                href={`/${link.href}`}
                 className="text-text-secondary hover:text-white transition-colors"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
           {/* Desktop CTA */}
           <div className="hidden md:block">
-            <Button onClick={onCtaClick}>Bepul sinab ko&apos;ring</Button>
+            {onCtaClick ? (
+              <Button onClick={onCtaClick}>Bepul sinab ko&apos;ring</Button>
+            ) : (
+              <Link href="/#contact">
+                <Button>Bepul sinab ko&apos;ring</Button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -84,18 +91,24 @@ export default function Header({ onCtaClick }: HeaderProps) {
           >
             <nav className="flex flex-col p-4 gap-4">
               {NAV_LINKS.map((link) => (
-                <a
+                <Link
                   key={link.href}
-                  href={link.href}
+                  href={`/${link.href}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="text-text-secondary hover:text-white transition-colors py-2"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
-              <Button onClick={onCtaClick} className="mt-2">
-                Bepul sinab ko&apos;ring
-              </Button>
+              {onCtaClick ? (
+                <Button onClick={onCtaClick} className="mt-2">
+                  Bepul sinab ko&apos;ring
+                </Button>
+              ) : (
+                <Link href="/#contact">
+                  <Button className="mt-2 w-full">Bepul sinab ko&apos;ring</Button>
+                </Link>
+              )}
             </nav>
           </motion.div>
         )}

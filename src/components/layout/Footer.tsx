@@ -1,5 +1,6 @@
 import { Phone, Mail, Send, Instagram } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { SITE_CONFIG, NAV_LINKS } from "@/lib/constants";
 
 export default function Footer() {
@@ -21,7 +22,7 @@ export default function Footer() {
               />
             </div>
             <p className="text-text-secondary mb-4 max-w-sm">
-              {SITE_CONFIG.tagline}. AI-powered qo&apos;ng&apos;iroq tahlili O&apos;zbekiston call-centerlari uchun.
+              {SITE_CONFIG.tagline}. CallMind qo&apos;ng&apos;iroq tahlili O&apos;zbekiston call-centerlari uchun.
             </p>
             <div className="flex gap-4">
               <a
@@ -92,12 +93,12 @@ export default function Footer() {
             &copy; {currentYear} {SITE_CONFIG.name}. Barcha huquqlar himoyalangan.
           </p>
           <div className="flex gap-6">
-            <a href="#" className="text-text-muted hover:text-white text-sm transition-colors">
+            <Link href="/privacy" className="text-text-muted hover:text-white text-sm transition-colors">
               Maxfiylik siyosati
-            </a>
-            <a href="#" className="text-text-muted hover:text-white text-sm transition-colors">
+            </Link>
+            <Link href="/terms" className="text-text-muted hover:text-white text-sm transition-colors">
               Foydalanish shartlari
-            </a>
+            </Link>
           </div>
         </div>
       </div>
