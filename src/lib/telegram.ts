@@ -8,6 +8,14 @@ interface LeadData {
   source?: string;
 }
 
+// Экранирование спецсимволов для HTML
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 export async function sendToTelegram(data: LeadData): Promise<boolean> {
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
     console.error("Telegram credentials not configured");
@@ -17,15 +25,16 @@ export async function sendToTelegram(data: LeadData): Promise<boolean> {
   const timestamp = new Date().toLocaleString("uz-UZ", { timeZone: "Asia/Tashkent" });
   const cleanPhone = data.phone.replace(/\s/g, "");
 
+  // Используем HTML вместо MarkdownV2 для надёжности
   const message = [
-    "🔔 *Yangi lid\!*",
+    "🔔 <b>Yangi lid!</b>",
     "",
-    "👤 *Ism:* *" + data.name + "*",
-    "📞 *Telefon:* `" + cleanPhone + "`",
-    "🏢 *Kompaniya:* " + data.company,
-    "📍 *Manba:* " + (data.source || "Landing page"),
+    "👤 <b>Ism:</b> " + escapeHtml(data.name),
+    "📞 <b>Telefon:</b> <code>" + escapeHtml(cleanPhone) + "</code>",
+    "🏢 <b>Kompaniya:</b> " + escapeHtml(data.company),
+    "📍 <b>Manba:</b> " + escapeHtml(data.source || "Landing page"),
     "",
-    "⏰ *Vaqt:* " + timestamp,
+    "⏰ <b>Vaqt:</b> " + escapeHtml(timestamp),
   ].join("\n");
 
   try {
@@ -39,7 +48,7 @@ export async function sendToTelegram(data: LeadData): Promise<boolean> {
         body: JSON.stringify({
           chat_id: TELEGRAM_CHAT_ID,
           text: message,
-          parse_mode: "MarkdownV2",
+          parse_mode: "HTML",
         }),
       }
     );
