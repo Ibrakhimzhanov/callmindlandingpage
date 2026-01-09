@@ -9,14 +9,25 @@ interface LeadFormProps {
   onSuccess?: () => void;
 }
 
+// Формат: +998 XX XXX-XX-XX
 const formatPhone = (value: string): string => {
-  const digits = value.replace(/\D/g, "");
+  // Извлекаем только цифры
+  let digits = value.replace(/\D/g, "");
+
+  // Убираем 998 если есть в начале (чтобы не дублировалось)
+  if (digits.startsWith("998")) {
+    digits = digits.slice(3);
+  }
+
+  // Ограничиваем до 9 цифр (без кода страны)
+  digits = digits.slice(0, 9);
+
+  // Форматируем: XX XXX-XX-XX
   if (digits.length === 0) return "+998 ";
-  if (digits.length <= 3) return "+" + digits;
-  if (digits.length <= 5) return "+" + digits.slice(0, 3) + " " + digits.slice(3);
-  if (digits.length <= 8) return "+" + digits.slice(0, 3) + " " + digits.slice(3, 5) + " " + digits.slice(5);
-  if (digits.length <= 10) return "+" + digits.slice(0, 3) + " " + digits.slice(3, 5) + " " + digits.slice(5, 8) + " " + digits.slice(8);
-  return "+" + digits.slice(0, 3) + " " + digits.slice(3, 5) + " " + digits.slice(5, 8) + " " + digits.slice(8, 10) + " " + digits.slice(10, 12);
+  if (digits.length <= 2) return "+998 " + digits;
+  if (digits.length <= 5) return "+998 " + digits.slice(0, 2) + " " + digits.slice(2);
+  if (digits.length <= 7) return "+998 " + digits.slice(0, 2) + " " + digits.slice(2, 5) + "-" + digits.slice(5);
+  return "+998 " + digits.slice(0, 2) + " " + digits.slice(2, 5) + "-" + digits.slice(5, 7) + "-" + digits.slice(7, 9);
 };
 
 export default function LeadForm({ onSuccess }: LeadFormProps) {
@@ -29,7 +40,13 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhone(e.target.value);
+    const value = e.target.value;
+    // Защита от удаления +998
+    if (value.length < 5) {
+      setFormData({ ...formData, phone: "+998 " });
+      return;
+    }
+    const formatted = formatPhone(value);
     setFormData({ ...formData, phone: formatted });
   };
 
