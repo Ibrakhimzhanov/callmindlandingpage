@@ -16,6 +16,19 @@ export interface FunctionItem {
   features: Feature[];
 }
 
+export interface PricingPlan {
+  name: string;
+  subtitle: string;
+  price: string;
+  oldPrice?: string;
+  unit: string;
+  badge?: string;
+  cta: string;
+  highlighted: boolean;
+  isEnterprise?: boolean;
+  features: { text: string; included: boolean }[];
+}
+
 export const SITE_CONFIG = {
   name: "CallMind",
   tagline: "Har bir qo'ng'iroq muhim",
@@ -311,7 +324,7 @@ export const STATS = [
   { value: 5, suffix: "x", label: "tezroq sifat nazorati" },
 ];
 
-export const PRICING_PLANS = [
+export const PRICING_PLANS: PricingPlan[] = [
   {
     name: "Boshlang'ich",
     subtitle: "Kichik call markazlar uchun",
