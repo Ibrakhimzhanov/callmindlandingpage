@@ -315,8 +315,7 @@ export const PRICING_PLANS = [
   {
     name: "Boshlang'ich",
     subtitle: "Kichik call markazlar uchun",
-    oldPrice: "650",
-    price: "550",
+    price: "650",
     unit: "/daqiqa",
     cta: "Boshlash",
     highlighted: false,
@@ -332,8 +331,7 @@ export const PRICING_PLANS = [
   {
     name: "Professional",
     subtitle: "O'rta hajmli call markazlar uchun",
-    oldPrice: "550",
-    price: "450",
+    price: "550",
     unit: "/daqiqa",
     badge: "Eng qulay",
     cta: "Boshlash",
@@ -350,7 +348,7 @@ export const PRICING_PLANS = [
   {
     name: "Maxsus",
     subtitle: "Katta call markazlar uchun",
-    price: "350",
+    price: "450",
     unit: "/daqiqa",
     isEnterprise: true,
     cta: "Bog'lanish",
