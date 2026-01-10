@@ -350,7 +350,6 @@ export const PRICING_PLANS = [
     subtitle: "Katta call markazlar uchun",
     price: "450",
     unit: "/daqiqa",
-    isEnterprise: true,
     cta: "Bog'lanish",
     highlighted: false,
     features: [
