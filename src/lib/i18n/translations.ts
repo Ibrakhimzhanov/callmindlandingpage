@@ -419,6 +419,12 @@ export const translations = {
       success: "Murojaatingiz qabul qilindi! Tez orada siz bilan bog'lanamiz.",
       error: "Xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring.",
     },
+
+    // Modal
+    modal: {
+      title: "Bepul konsultatsiya",
+      subtitle: "Ma'lumotlaringizni qoldiring va biz siz bilan bog'lanamiz",
+    },
   },
 
   ru: {
@@ -840,6 +846,12 @@ export const translations = {
       successTitle: "Спасибо!",
       success: "Ваша заявка принята! Мы скоро свяжемся с вами.",
       error: "Произошла ошибка. Пожалуйста, попробуйте снова.",
+    },
+
+    // Modal
+    modal: {
+      title: "Бесплатная консультация",
+      subtitle: "Оставьте свои данные и мы свяжемся с вами",
     },
   },
 };

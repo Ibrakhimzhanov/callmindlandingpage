@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, LogIn, Globe } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Menu, X, Globe, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
@@ -12,37 +12,40 @@ interface HeaderProps {
   onCtaClick?: () => void;
 }
 
-function LanguageSwitcher() {
+function LanguageSwitcher({ isScrolled }: { isScrolled: boolean }) {
   const { language, setLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
 
   const languages: { code: Language; label: string }[] = [
-    { code: "uz", label: "UZ" },
-    { code: "ru", label: "RU" },
+    { code: "uz", label: "O'zbek" },
+    { code: "ru", label: "Русский" },
   ];
 
   return (
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-text-secondary hover:text-white hover:bg-white/10 transition-all"
+        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg transition-colors cursor-pointer ${
+          isScrolled
+            ? "text-text-secondary hover:text-text-primary hover:bg-background-secondary"
+            : "text-white/80 hover:text-white hover:bg-white/10"
+        }`}
       >
         <Globe className="w-4 h-4" />
         <span className="text-sm font-medium">{language.toUpperCase()}</span>
+        <ChevronDown className={`w-3 h-3 transition-transform ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       <AnimatePresence>
         {isOpen && (
           <>
-            <div
-              className="fixed inset-0 z-40"
-              onClick={() => setIsOpen(false)}
-            />
+            <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="absolute right-0 top-full mt-2 glass rounded-lg overflow-hidden z-50 min-w-[80px]"
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.15 }}
+              className="absolute right-0 top-full mt-1 bg-white border border-border rounded-xl shadow-lg overflow-hidden z-50 min-w-[140px]"
             >
               {languages.map((lang) => (
                 <button
@@ -51,10 +54,10 @@ function LanguageSwitcher() {
                     setLanguage(lang.code);
                     setIsOpen(false);
                   }}
-                  className={`w-full px-4 py-2 text-left text-sm transition-colors ${
+                  className={`w-full px-4 py-2.5 text-left text-sm transition-colors cursor-pointer ${
                     language === lang.code
-                      ? "bg-primary/20 text-white"
-                      : "text-text-secondary hover:text-white hover:bg-white/10"
+                      ? "bg-accent-light text-accent font-medium"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                   }`}
                 >
                   {lang.label}
@@ -82,18 +85,18 @@ export default function Header({ onCtaClick }: HeaderProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "glass py-3" : "bg-transparent py-5"
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
+        isScrolled
+          ? "bg-white/95 backdrop-blur-sm border-b border-border shadow-sm py-3"
+          : "bg-transparent py-5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -103,20 +106,24 @@ export default function Header({ onCtaClick }: HeaderProps) {
             <Image
               src="/logo-white.png"
               alt="CallMind"
-              width={150}
-              height={50}
-              className="h-10 w-auto"
+              width={140}
+              height={40}
+              className={`h-9 w-auto transition-all ${isScrolled ? "brightness-0" : ""}`}
               priority
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={`/${link.href}`}
-                className="text-text-secondary hover:text-white transition-colors"
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  isScrolled
+                    ? "text-text-secondary hover:text-text-primary hover:bg-background-secondary"
+                    : "text-white/80 hover:text-white hover:bg-white/10"
+                }`}
               >
                 {link.label}
               </Link>
@@ -124,24 +131,29 @@ export default function Header({ onCtaClick }: HeaderProps) {
           </nav>
 
           {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-3">
-            <LanguageSwitcher />
+          <div className="hidden md:flex items-center gap-2">
+            <LanguageSwitcher isScrolled={isScrolled} />
 
             <Link
               href="https://panel.callmind.uz/login"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-text-secondary hover:text-white hover:bg-white/10 transition-all"
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                isScrolled
+                  ? "text-text-secondary hover:text-text-primary hover:bg-background-secondary"
+                  : "text-white/80 hover:text-white hover:bg-white/10"
+              }`}
             >
-              <LogIn className="w-4 h-4" />
-              <span>{t.header.login}</span>
+              {t.header.login}
             </Link>
 
             {onCtaClick ? (
-              <Button onClick={onCtaClick}>{t.header.cta}</Button>
+              <Button onClick={onCtaClick} size="md">
+                {t.header.cta}
+              </Button>
             ) : (
               <Link href="/#contact">
-                <Button>{t.header.cta}</Button>
+                <Button size="md">{t.header.cta}</Button>
               </Link>
             )}
           </div>
@@ -149,7 +161,12 @@ export default function Header({ onCtaClick }: HeaderProps) {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-white"
+            className={`md:hidden p-2 rounded-lg transition-colors cursor-pointer ${
+              isScrolled
+                ? "text-text-primary hover:bg-background-secondary"
+                : "text-white hover:bg-white/10"
+            }`}
+            aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -163,47 +180,47 @@ export default function Header({ onCtaClick }: HeaderProps) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass mt-2 mx-4 rounded-xl overflow-hidden"
+            transition={{ duration: 0.2 }}
+            className="md:hidden bg-white border-t border-border mt-2 overflow-hidden"
           >
-            <nav className="flex flex-col p-4 gap-4">
+            <nav className="flex flex-col p-4 gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={`/${link.href}`}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-text-secondary hover:text-white transition-colors py-2"
+                  className="px-4 py-3 rounded-lg text-text-secondary hover:text-text-primary hover:bg-background-secondary transition-colors font-medium"
                 >
                   {link.label}
                 </Link>
               ))}
 
-              <div className="flex items-center justify-between py-2 border-t border-white/10">
-                <LanguageSwitcher />
+              <div className="flex items-center justify-between py-3 mt-2 border-t border-border">
+                <LanguageSwitcher isScrolled={true} />
                 <Link
                   href="https://panel.callmind.uz/login"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-text-secondary hover:text-white hover:bg-white/10 transition-all"
+                  className="px-4 py-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-background-secondary transition-colors font-medium"
                 >
-                  <LogIn className="w-4 h-4" />
-                  <span>{t.header.login}</span>
+                  {t.header.login}
                 </Link>
               </div>
 
               {onCtaClick ? (
-                <Button onClick={onCtaClick} className="mt-2">
+                <Button onClick={onCtaClick} className="mt-2 w-full">
                   {t.header.cta}
                 </Button>
               ) : (
-                <Link href="/#contact">
-                  <Button className="mt-2 w-full">{t.header.cta}</Button>
+                <Link href="/#contact" className="mt-2">
+                  <Button className="w-full">{t.header.cta}</Button>
                 </Link>
               )}
             </nav>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 }

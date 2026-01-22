@@ -109,8 +109,13 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
         animate={{ opacity: 1, scale: 1 }}
         className="text-center py-8"
       >
-        <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-        <h4 className="text-xl font-bold text-white mb-2">
+        <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+          <CheckCircle className="w-8 h-8 text-green-600" />
+        </div>
+        <h4
+          className="text-xl font-bold text-text-primary mb-2"
+          style={{ fontFamily: "var(--font-heading)" }}
+        >
           {t.leadForm.successTitle || "Rahmat!"}
         </h4>
         <p className="text-text-secondary">{t.leadForm.success}</p>
@@ -121,7 +126,7 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-text-secondary mb-2">
+        <label className="block text-sm font-medium text-text-primary mb-2">
           {t.leadForm.name}
         </label>
         <input
@@ -130,12 +135,12 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           placeholder={t.leadForm.namePlaceholder}
           required
-          className="w-full px-4 py-3 bg-surface border border-border rounded-xl text-white placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
+          className="w-full px-4 py-3 bg-background-secondary border border-border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-text-secondary mb-2">
+        <label className="block text-sm font-medium text-text-primary mb-2">
           {t.leadForm.phone}
         </label>
         <input
@@ -144,12 +149,12 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
           onChange={handlePhoneChange}
           placeholder={t.leadForm.phonePlaceholder}
           required
-          className="w-full px-4 py-3 bg-surface border border-border rounded-xl text-white placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
+          className="w-full px-4 py-3 bg-background-secondary border border-border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-text-secondary mb-2">
+        <label className="block text-sm font-medium text-text-primary mb-2">
           {t.leadForm.company}
         </label>
         <input
@@ -160,7 +165,7 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
           }
           placeholder={t.leadForm.companyPlaceholder}
           required
-          className="w-full px-4 py-3 bg-surface border border-border rounded-xl text-white placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
+          className="w-full px-4 py-3 bg-background-secondary border border-border rounded-xl text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
         />
       </div>
 
@@ -168,9 +173,9 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2 text-red-400 text-sm"
+          className="flex items-center gap-2 p-3 rounded-lg bg-red-50 text-red-600 text-sm"
         >
-          <AlertCircle className="w-4 h-4" />
+          <AlertCircle className="w-4 h-4 shrink-0" />
           {errorMessage}
         </motion.div>
       )}
