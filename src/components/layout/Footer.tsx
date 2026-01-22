@@ -1,10 +1,21 @@
+"use client";
+
 import { Phone, Mail, Send, Instagram } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { SITE_CONFIG, NAV_LINKS } from "@/lib/constants";
+import { SITE_CONFIG } from "@/lib/constants";
+import { useTranslation } from "@/lib/i18n";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const t = useTranslation();
+
+  const navLinks = [
+    { label: t.nav.functions, href: "#functions" },
+    { label: t.nav.pricing, href: "#pricing" },
+    { label: t.nav.faq, href: "#faq" },
+    { label: t.nav.contact, href: "#contact" },
+  ];
 
   return (
     <footer className="bg-primary/50 border-t border-border">
@@ -22,7 +33,7 @@ export default function Footer() {
               />
             </div>
             <p className="text-text-secondary mb-4 max-w-sm">
-              {SITE_CONFIG.tagline}. CallMind qo&apos;ng&apos;iroq tahlili O&apos;zbekiston call-centerlari uchun.
+              {t.site.tagline}. {t.footer.description}
             </p>
             <div className="flex gap-4">
               <a
@@ -46,9 +57,9 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Sahifalar</h4>
+            <h4 className="text-white font-semibold mb-4">{t.footer.pages}</h4>
             <ul className="space-y-2">
-              {NAV_LINKS.map((link) => (
+              {navLinks.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
@@ -63,7 +74,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Bog&apos;lanish</h4>
+            <h4 className="text-white font-semibold mb-4">{t.footer.contact}</h4>
             <ul className="space-y-3">
               <li>
                 <a
@@ -90,14 +101,20 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-border mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-text-muted text-sm">
-            &copy; {currentYear} {SITE_CONFIG.name}. Barcha huquqlar himoyalangan.
+            &copy; {currentYear} {SITE_CONFIG.name}. {t.footer.rights}.
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-text-muted hover:text-white text-sm transition-colors">
-              Maxfiylik siyosati
+            <Link
+              href="/privacy"
+              className="text-text-muted hover:text-white text-sm transition-colors"
+            >
+              {t.footer.privacy}
             </Link>
-            <Link href="/terms" className="text-text-muted hover:text-white text-sm transition-colors">
-              Foydalanish shartlari
+            <Link
+              href="/terms"
+              className="text-text-muted hover:text-white text-sm transition-colors"
+            >
+              {t.footer.terms}
             </Link>
           </div>
         </div>

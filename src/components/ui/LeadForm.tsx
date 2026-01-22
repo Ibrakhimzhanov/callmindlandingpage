@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import Button from "./Button";
+import { useTranslation } from "@/lib/i18n";
 
 interface LeadFormProps {
   onSuccess?: () => void;
@@ -25,18 +26,39 @@ const formatPhone = (value: string): string => {
   // Форматируем: XX XXX-XX-XX
   if (digits.length === 0) return "+998 ";
   if (digits.length <= 2) return "+998 " + digits;
-  if (digits.length <= 5) return "+998 " + digits.slice(0, 2) + " " + digits.slice(2);
-  if (digits.length <= 7) return "+998 " + digits.slice(0, 2) + " " + digits.slice(2, 5) + "-" + digits.slice(5);
-  return "+998 " + digits.slice(0, 2) + " " + digits.slice(2, 5) + "-" + digits.slice(5, 7) + "-" + digits.slice(7, 9);
+  if (digits.length <= 5)
+    return "+998 " + digits.slice(0, 2) + " " + digits.slice(2);
+  if (digits.length <= 7)
+    return (
+      "+998 " +
+      digits.slice(0, 2) +
+      " " +
+      digits.slice(2, 5) +
+      "-" +
+      digits.slice(5)
+    );
+  return (
+    "+998 " +
+    digits.slice(0, 2) +
+    " " +
+    digits.slice(2, 5) +
+    "-" +
+    digits.slice(5, 7) +
+    "-" +
+    digits.slice(7, 9)
+  );
 };
 
 export default function LeadForm({ onSuccess }: LeadFormProps) {
+  const t = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     phone: "+998 ",
     company: "",
   });
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,7 +87,7 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Xatolik yuz berdi");
+        throw new Error(data.error || t.leadForm.error);
       }
 
       setStatus("success");
@@ -76,7 +98,7 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
       }, 2000);
     } catch (error) {
       setStatus("error");
-      setErrorMessage(error instanceof Error ? error.message : "Xatolik yuz berdi");
+      setErrorMessage(error instanceof Error ? error.message : t.leadForm.error);
     }
   };
 
@@ -88,10 +110,10 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
         className="text-center py-8"
       >
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-        <h4 className="text-xl font-bold text-white mb-2">Rahmat!</h4>
-        <p className="text-text-secondary">
-          Tez orada siz bilan boglanamiz
-        </p>
+        <h4 className="text-xl font-bold text-white mb-2">
+          {t.leadForm.successTitle || "Rahmat!"}
+        </h4>
+        <p className="text-text-secondary">{t.leadForm.success}</p>
       </motion.div>
     );
   }
@@ -100,13 +122,13 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-text-secondary mb-2">
-          Ismingiz
+          {t.leadForm.name}
         </label>
         <input
           type="text"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          placeholder="Ismingizni kiriting"
+          placeholder={t.leadForm.namePlaceholder}
           required
           className="w-full px-4 py-3 bg-surface border border-border rounded-xl text-white placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
         />
@@ -114,13 +136,13 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-text-secondary mb-2">
-          Telefon raqami
+          {t.leadForm.phone}
         </label>
         <input
           type="tel"
           value={formData.phone}
           onChange={handlePhoneChange}
-          placeholder="+998 90 123 45 67"
+          placeholder={t.leadForm.phonePlaceholder}
           required
           className="w-full px-4 py-3 bg-surface border border-border rounded-xl text-white placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
         />
@@ -128,13 +150,15 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-text-secondary mb-2">
-          Kompaniya nomi
+          {t.leadForm.company}
         </label>
         <input
           type="text"
           value={formData.company}
-          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-          placeholder="Kompaniya nomini kiriting"
+          onChange={(e) =>
+            setFormData({ ...formData, company: e.target.value })
+          }
+          placeholder={t.leadForm.companyPlaceholder}
           required
           className="w-full px-4 py-3 bg-surface border border-border rounded-xl text-white placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors"
         />
@@ -160,10 +184,10 @@ export default function LeadForm({ onSuccess }: LeadFormProps) {
         {status === "loading" ? (
           <>
             <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-            Yuborilmoqda...
+            {t.leadForm.submitting}
           </>
         ) : (
-          "Yuborish"
+          t.leadForm.submit
         )}
       </Button>
     </form>

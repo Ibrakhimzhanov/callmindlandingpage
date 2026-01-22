@@ -2,19 +2,83 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogIn, Globe } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
-import { NAV_LINKS } from "@/lib/constants";
+import { useLanguage, useTranslation, Language } from "@/lib/i18n";
 
 interface HeaderProps {
   onCtaClick?: () => void;
 }
 
+function LanguageSwitcher() {
+  const { language, setLanguage } = useLanguage();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const languages: { code: Language; label: string }[] = [
+    { code: "uz", label: "UZ" },
+    { code: "ru", label: "RU" },
+  ];
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-text-secondary hover:text-white hover:bg-white/10 transition-all"
+      >
+        <Globe className="w-4 h-4" />
+        <span className="text-sm font-medium">{language.toUpperCase()}</span>
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <div
+              className="fixed inset-0 z-40"
+              onClick={() => setIsOpen(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="absolute right-0 top-full mt-2 glass rounded-lg overflow-hidden z-50 min-w-[80px]"
+            >
+              {languages.map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => {
+                    setLanguage(lang.code);
+                    setIsOpen(false);
+                  }}
+                  className={`w-full px-4 py-2 text-left text-sm transition-colors ${
+                    language === lang.code
+                      ? "bg-primary/20 text-white"
+                      : "text-text-secondary hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  {lang.label}
+                </button>
+              ))}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function Header({ onCtaClick }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const t = useTranslation();
+
+  const navLinks = [
+    { label: t.nav.functions, href: "#functions" },
+    { label: t.nav.pricing, href: "#pricing" },
+    { label: t.nav.faq, href: "#faq" },
+    { label: t.nav.contact, href: "#contact" },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,7 +112,7 @@ export default function Header({ onCtaClick }: HeaderProps) {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={`/${link.href}`}
@@ -59,13 +123,25 @@ export default function Header({ onCtaClick }: HeaderProps) {
             ))}
           </nav>
 
-          {/* Desktop CTA */}
-          <div className="hidden md:block">
+          {/* Desktop Actions */}
+          <div className="hidden md:flex items-center gap-3">
+            <LanguageSwitcher />
+
+            <Link
+              href="https://panel.callmind.uz/login"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-text-secondary hover:text-white hover:bg-white/10 transition-all"
+            >
+              <LogIn className="w-4 h-4" />
+              <span>{t.header.login}</span>
+            </Link>
+
             {onCtaClick ? (
-              <Button onClick={onCtaClick}>Bepul sinab ko&apos;ring</Button>
+              <Button onClick={onCtaClick}>{t.header.cta}</Button>
             ) : (
               <Link href="/#contact">
-                <Button>Bepul sinab ko&apos;ring</Button>
+                <Button>{t.header.cta}</Button>
               </Link>
             )}
           </div>
@@ -90,7 +166,7 @@ export default function Header({ onCtaClick }: HeaderProps) {
             className="md:hidden glass mt-2 mx-4 rounded-xl overflow-hidden"
           >
             <nav className="flex flex-col p-4 gap-4">
-              {NAV_LINKS.map((link) => (
+              {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={`/${link.href}`}
@@ -100,13 +176,28 @@ export default function Header({ onCtaClick }: HeaderProps) {
                   {link.label}
                 </Link>
               ))}
+
+              <div className="flex items-center justify-between py-2 border-t border-white/10">
+                <LanguageSwitcher />
+                <Link
+                  href="https://panel.callmind.uz/login"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-text-secondary hover:text-white hover:bg-white/10 transition-all"
+                >
+                  <LogIn className="w-4 h-4" />
+                  <span>{t.header.login}</span>
+                </Link>
+              </div>
+
               {onCtaClick ? (
                 <Button onClick={onCtaClick} className="mt-2">
-                  Bepul sinab ko&apos;ring
+                  {t.header.cta}
                 </Button>
               ) : (
                 <Link href="/#contact">
-                  <Button className="mt-2 w-full">Bepul sinab ko&apos;ring</Button>
+                  <Button className="mt-2 w-full">{t.header.cta}</Button>
                 </Link>
               )}
             </nav>

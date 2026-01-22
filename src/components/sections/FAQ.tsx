@@ -4,10 +4,11 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import FadeInView from "@/components/animations/FadeInView";
-import { FAQ_ITEMS } from "@/lib/constants";
+import { useTranslation } from "@/lib/i18n";
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const t = useTranslation();
 
   return (
     <section id="faq" className="py-24 relative">
@@ -15,23 +16,26 @@ export default function FAQ() {
         <FadeInView>
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
-              Ko'p so'raladigan <span className="gradient-text">savollar</span>
+              {t.faq.title}{" "}
+              <span className="gradient-text">{t.faq.titleHighlight}</span>
             </h2>
-            <p className="text-text-secondary text-lg">
-              Savollaringizga javoblar
-            </p>
+            <p className="text-text-secondary text-lg">{t.faq.subtitle}</p>
           </div>
         </FadeInView>
 
         <div className="space-y-4">
-          {FAQ_ITEMS.map((item, index) => (
+          {t.faq.items.map((item, index) => (
             <FadeInView key={index} delay={index * 0.1}>
               <div className="glass rounded-xl overflow-hidden">
                 <button
-                  onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                  onClick={() =>
+                    setOpenIndex(openIndex === index ? null : index)
+                  }
                   className="w-full px-6 py-4 flex items-center justify-between text-left"
                 >
-                  <span className="text-white font-medium pr-4">{item.question}</span>
+                  <span className="text-white font-medium pr-4">
+                    {item.question}
+                  </span>
                   <motion.div
                     animate={{ rotate: openIndex === index ? 180 : 0 }}
                     transition={{ duration: 0.2 }}
@@ -39,7 +43,7 @@ export default function FAQ() {
                     <ChevronDown className="w-5 h-5 text-accent shrink-0" />
                   </motion.div>
                 </button>
-                
+
                 <AnimatePresence>
                   {openIndex === index && (
                     <motion.div

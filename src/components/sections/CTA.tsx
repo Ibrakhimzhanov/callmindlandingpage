@@ -4,12 +4,15 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import Button from "@/components/ui/Button";
 import FadeInView from "@/components/animations/FadeInView";
+import { useTranslation } from "@/lib/i18n";
 
 interface CTAProps {
   onCtaClick: () => void;
 }
 
 export default function CTA({ onCtaClick }: CTAProps) {
+  const t = useTranslation();
+
   return (
     <section id="contact" className="py-24 relative overflow-hidden">
       {/* Background gradient */}
@@ -25,26 +28,24 @@ export default function CTA({ onCtaClick }: CTAProps) {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4" />
-              Birinchi 50 ta qo'ng'iroq bepul
+              {t.cta.badge}
             </div>
 
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
-              Har kuni yo'qotilayotgan{" "}
-              <span className="gradient-text">sotuvlarni to'xtating</span>
+              {t.cta.titlePart1}{" "}
+              <span className="gradient-text">{t.cta.titleHighlight}</span>
             </h2>
 
             <p className="text-text-secondary text-lg mb-8 max-w-2xl mx-auto">
-              5 daqiqada ro'yxatdan o'ting va qo'ng'iroqlaringizni professional tahlil qilishni boshlang
+              {t.cta.subtitle}
             </p>
 
             <Button size="lg" onClick={onCtaClick} className="group">
-              Hoziroq boshlash
+              {t.cta.button}
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
 
-            <p className="text-text-muted text-sm mt-6">
-              Kredit karta talab qilinmaydi • Cheksiz sinov muddati
-            </p>
+            <p className="text-text-muted text-sm mt-6">{t.cta.note}</p>
           </motion.div>
         </FadeInView>
       </div>

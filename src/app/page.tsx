@@ -4,7 +4,6 @@ import { useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Hero from "@/components/sections/Hero";
-import Problems from "@/components/sections/Problems";
 import Solution from "@/components/sections/Solution";
 import Functions from "@/components/sections/Functions";
 import Stats from "@/components/sections/Stats";
@@ -26,10 +25,9 @@ export default function Home() {
 
       <main>
         <Hero onCtaClick={openModal} />
-        <Problems />
+        <Stats />
         <Solution />
         <Functions />
-        <Stats />
         <Pricing onCtaClick={openModal} />
         <FAQ />
         <CTA onCtaClick={openModal} />
