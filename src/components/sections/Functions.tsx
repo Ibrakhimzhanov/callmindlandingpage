@@ -156,12 +156,12 @@ export default function Functions() {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
                         className={`flex gap-4 p-4 rounded-xl bg-background-secondary ${
-                          feature.coming ? "opacity-70" : ""
+                          "coming" in feature && feature.coming ? "opacity-70" : ""
                         }`}
                       >
                         <div
                           className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm ${
-                            feature.coming
+                            "coming" in feature && feature.coming
                               ? "bg-warning/10 text-warning"
                               : "bg-accent-light text-accent"
                           }`}
@@ -173,7 +173,7 @@ export default function Functions() {
                             <h4 className="text-text-primary font-semibold">
                               {feature.title}
                             </h4>
-                            {feature.coming && (
+                            {"coming" in feature && feature.coming && (
                               <span className="px-2 py-0.5 rounded-full bg-warning/10 text-warning text-xs font-medium flex items-center gap-1">
                                 <Clock className="w-3 h-3" />
                                 {t.functions.coming}
