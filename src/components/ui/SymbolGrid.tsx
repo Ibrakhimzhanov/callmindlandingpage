@@ -17,7 +17,7 @@ interface GridCell {
 export default function SymbolGrid() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [cells, setCells] = useState<GridCell[]>([]);
-  const intervalRef = useRef<NodeJS.Timeout>();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize grid
   useEffect(() => {
