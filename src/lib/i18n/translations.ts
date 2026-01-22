@@ -304,6 +304,7 @@ export const translations = {
       featuresHeader: "NIMALARNI O'Z ICHIGA OLADI",
       trialNote: "Yangi hamkorlar uchun",
       trialHighlight: "7 kunlik bepul sinov davri",
+      contactUs: "Bog'laning",
       plans: [
         {
           name: "Boshlang'ich",
@@ -732,6 +733,7 @@ export const translations = {
       featuresHeader: "ЧТО ВКЛЮЧЕНО",
       trialNote: "Для новых партнеров",
       trialHighlight: "7 дней бесплатного пробного периода",
+      contactUs: "Свяжитесь с нами",
       plans: [
         {
           name: "Начальный",

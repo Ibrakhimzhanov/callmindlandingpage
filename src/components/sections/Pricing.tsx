@@ -83,7 +83,7 @@ export default function Pricing({ onCtaClick }: PricingProps) {
                       plan.highlighted ? "text-white" : "text-text-primary"
                     }`}
                   >
-                    {t.pricing.contactUs || "Bog'laning"}
+                    {t.pricing.contactUs}
                   </div>
                 ) : (
                   <div className="flex items-baseline">
